@@ -1,12 +1,15 @@
 package org.michalak;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.michalak.dto.User;
 import org.michalak.service.LoginService;
 
 /**
@@ -39,6 +42,13 @@ public class LoginServlet extends HttpServlet {
 		boolean result = loginService.authenticate(userId, password);
 		
 		if (result){
+			User user = loginService.getUserDetails(userId);
+			request.setAttribute("user", user);
+			
+			RequestDispatcher requestDispatcher= request.getRequestDispatcher("success.jsp");
+			requestDispatcher.forward(request, response);
+			
+			
 			response.sendRedirect("success.jsp");
 			//return;//do know why is hear 
 		}else{
